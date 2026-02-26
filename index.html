@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/portfolio2/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kaustubh Mestri | Gen AI Developer</title>
+  <meta name="description"
+    content="Portfolio of a Generative AI Developer specializing in LLMs, RAG systems, and AI architecture." />
+  <script type="module" crossorigin src="/portfolio2/assets/index-CiOqyQdo.js"></script>
+  <link rel="stylesheet" crossorigin href="/portfolio2/assets/index-qXXQ5lC1.css">
+</head>
+
+<body>
+  <!-- Background Animation Canvas -->
+  <canvas id="token-stream"></canvas>
+
+  <!-- Custom Cursor -->
+  <div id="custom-cursor"></div>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="#" class="logo interactive">Kaustubh<span>.</span></a>
+    <div class="nav-links">
+      <a href="#projects" class="interactive">/projects</a>
+      <a href="#stack" class="interactive">/stack</a>
+      <a href="#contact" class="interactive">/contact</a>
+    </div>
+  </nav>
+
+  <!-- Main Content wrapper -->
+  <main>
+    <!-- Hero Section -->
+    <section class="hero container" id="home">
+      <div class="hero-content" data-parallax="0.1">
+        <div class="hero-eyebrow">System Online</div>
+        <h1 class="hero-title">Kaustubh Mestri.</h1>
+        <p class="hero-subtitle">
+          I am a Generative AI Developer building state-of-the-art LLM-powered
+          applications, RAG systems, and data pipelines. Blending
+          infrastructure and intelligence to solve complex problems.
+        </p>
+        <div class="hero-cta">
+          <a href="https://github.com/KaustubhMestri" target="_blank" class="btn btn-primary interactive">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path
+                d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+              </path>
+            </svg>
+            GitHub
+          </a>
+          <a href="https://www.linkedin.com/in/kaustubhmestri" target="_blank" class="btn btn-secondary interactive">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+              <rect x="2" y="9" width="4" height="12"></rect>
+              <circle cx="4" cy="4" r="2"></circle>
+            </svg>
+            LinkedIn
+          </a>
+        </div>
+      </div>
+
+      <!-- Terminal Component -->
+      <div class="terminal-wrapper glass-panel" data-parallax="0.2">
+        <div class="terminal-header">
+          <div class="terminal-dot close"></div>
+          <div class="terminal-dot min"></div>
+          <div class="terminal-dot max"></div>
+          <div class="terminal-title">guest@kaustubh: ~</div>
+        </div>
+        <div class="terminal-body" id="terminal-output">
+          <div class="terminal-line">
+            <span class="terminal-prompt">guest@kaustubh:~$</span>
+            <span class="terminal-cmd">./init.sh</span>
+          </div>
+          <div class="terminal-line">Initializing Gen AI runtime... OK</div>
+          <div class="terminal-line">
+            Type <span class="text-cyan">'help'</span> for available commands,
+            or <span class="text-cyan">'about'</span> for bio.
+          </div>
+
+          <div class="terminal-input-line">
+            <span class="terminal-prompt">guest@kaustubh:~$</span>
+            <input type="text" id="terminal-input" class="terminal-input interactive" autocomplete="off"
+              spellcheck="false" autofocus />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="container" id="projects">
+      <h2 class="section-title">Deployed Protocols</h2>
+      <p class="text-secondary mono" style="font-size: 0.85rem; margin-bottom: 2.5rem; opacity: 0.7">
+        // Live repositories fetched from GitHub
+      </p>
+
+      <div class="github-repos-grid" id="github-repos-grid">
+        <div class="repo-loading mono text-secondary">
+          Fetching repositories<span class="blink">_</span>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 3rem">
+        <a href="https://github.com/KaustubhMestri" target="_blank" class="btn btn-secondary interactive">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path
+              d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+            </path>
+          </svg>
+          View All on GitHub
+        </a>
+      </div>
+    </section>
+
+    <!-- Tech Stack Section -->
+    <section class="container" id="stack">
+      <h2 class="section-title">Core Competencies</h2>
+      <div class="tech-container mb-4">
+        <div class="tech-pill interactive">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2l10 6.5v7L12 22 2 15.5v-7L12 2z"></path>
+          </svg>
+          Python
+        </div>
+        <div class="tech-pill interactive"><span>⚡</span> FastAPI</div>
+        <div class="tech-pill interactive"><span>🦜</span> LangChain</div>
+        <div class="tech-pill interactive">
+          <span>📊</span> Pandas / Data science
+        </div>
+        <div class="tech-pill interactive"><span>🧠</span> Vector DBs</div>
+        <div class="tech-pill interactive">
+          <span>🤖</span> OpenAI / Gemini APIs
+        </div>
+        <div class="tech-pill interactive">
+          <span>🔍</span> RAG Architectures
+        </div>
+        <div class="tech-pill interactive">
+          <span>🚀</span> Prompt Engineering
+        </div>
+      </div>
+    </section>
+
+    <!-- Connect Section -->
+    <section class="container mb-4" id="contact">
+      <h2 class="section-title" style="justify-content: center; text-align: center">
+        Let's Connect
+      </h2>
+      <p class="text-center text-secondary mono" style="margin-bottom: 3rem; font-size: 0.9rem">
+        Open to full-time roles, freelance, and Gen AI collaborations.
+      </p>
+
+      <div class="connect-grid">
+        <!-- LinkedIn -->
+        <a href="https://www.linkedin.com/in/kaustubhmestri" target="_blank" rel="noopener"
+          class="connect-card interactive">
+          <div class="connect-icon connect-icon--blue">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+              <rect x="2" y="9" width="4" height="12" />
+              <circle cx="4" cy="4" r="2" />
+            </svg>
+          </div>
+          <div class="connect-info">
+            <span class="connect-label mono">LinkedIn</span>
+            <span class="connect-value">Kaustubh Mestri</span>
+          </div>
+          <svg class="connect-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <line x1="7" y1="17" x2="17" y2="7" />
+            <polyline points="7 7 17 7 17 17" />
+          </svg>
+        </a>
+
+        <!-- GitHub -->
+        <a href="https://github.com/KaustubhMestri" target="_blank" rel="noopener" class="connect-card interactive">
+          <div class="connect-icon connect-icon--cyan">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path
+                d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+            </svg>
+          </div>
+          <div class="connect-info">
+            <span class="connect-label mono">GitHub</span>
+            <span class="connect-value">KaustubhMestri</span>
+          </div>
+          <svg class="connect-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <line x1="7" y1="17" x2="17" y2="7" />
+            <polyline points="7 7 17 7 17 17" />
+          </svg>
+        </a>
+
+        <!-- Email -->
+        <a href="mailto:kaustubh.mestrii@gmail.com" class="connect-card interactive">
+          <div class="connect-icon connect-icon--purple">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+              <polyline points="22,6 12,13 2,6" />
+            </svg>
+          </div>
+          <div class="connect-info">
+            <span class="connect-label mono">Email</span>
+            <span class="connect-value">kaustubh.mestrii@gmail.com</span>
+          </div>
+          <svg class="connect-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <line x1="7" y1="17" x2="17" y2="7" />
+            <polyline points="7 7 17 7 17 17" />
+          </svg>
+        </a>
+
+        <!-- Phone -->
+        <a href="tel:+917720053652" class="connect-card interactive">
+          <div class="connect-icon connect-icon--green">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path
+                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.44 2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+            </svg>
+          </div>
+          <div class="connect-info">
+            <span class="connect-label mono">Phone</span>
+            <span class="connect-value">+91 77200 53652</span>
+          </div>
+          <svg class="connect-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <line x1="7" y1="17" x2="17" y2="7" />
+            <polyline points="7 7 17 7 17 17" />
+          </svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="container" style="
+          text-align: center;
+          padding: 2rem 0;
+          margin-top: 4rem;
+          border-top: 1px solid rgba(255, 255, 255, 0.05);
+        ">
+      <p class="mono text-secondary" style="font-size: 0.875rem">
+        <a href="https://github.com/KaustubhMestri/portfolio2" target="_blank" class="interactive" style="
+              color: var(--color-text-secondary);
+              text-decoration: none;
+              transition: color 0.3s ease;
+            " onmouseover="this.style.color = 'var(--color-cyan)'"
+          onmouseout="this.style.color = 'var(--color-text-secondary)'">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="
+                display: inline-block;
+                vertical-align: text-bottom;
+                margin-right: 0.25rem;
+              ">
+            <path
+              d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+            </path>
+          </svg>
+          View Source on GitHub
+        </a>
+      </p>
+    </footer>
+  </main>
+</body>
+
+</html>
