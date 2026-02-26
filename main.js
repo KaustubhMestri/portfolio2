@@ -1,32 +1,5 @@
 import './style.css';
 
-// 1. Custom Cursor Logic
-const cursor = document.getElementById('custom-cursor');
-const interactives = document.querySelectorAll('.interactive, a, button, input, textarea');
-
-document.addEventListener('mousemove', (e) => {
-    // Update cursor position
-    cursor.style.left = e.clientX + 'px';
-    cursor.style.top = e.clientY + 'px';
-});
-
-// Add hover states for interactive elements
-interactives.forEach(el => {
-    el.addEventListener('mouseenter', () => {
-        cursor.classList.add('active');
-    });
-    el.addEventListener('mouseleave', () => {
-        cursor.classList.remove('active');
-    });
-});
-
-// Hide cursor when leaving window
-document.addEventListener('mouseleave', () => {
-    cursor.style.opacity = '0';
-});
-document.addEventListener('mouseenter', () => {
-    cursor.style.opacity = '1';
-});
 
 // 2. Parallax Effect logic
 const parallaxElements = document.querySelectorAll('[data-parallax]');
@@ -59,43 +32,61 @@ window.addEventListener('resize', () => {
 });
 
 // Characters - Hex, code snippets, matrix style
-const chars = '0123456789ABCDEF{}[]();:<>/?=*+-!^&|~'.split('');
-const fontSize = 14;
-const columns = cw / fontSize;
+const chars = ['0', '1'];
+const fontSize = 16;
+const colSpacing = 22; // wider spacing = sparser / more minimal
+const columns = Math.floor(cw / colSpacing);
 const drops = [];
+const colColor = []; // per-column colour: 0=cyan, 1=purple
 
-// Initialize drops starting at top or random
+// Initialize drops and assign a colour per column
 for (let x = 0; x < columns; x++) {
-    drops[x] = Math.random() * ch; // start at random heights initially
+    drops[x] = Math.random() * (ch / fontSize);
+    colColor[x] = Math.random() > 0.65 ? 1 : 0;
 }
 
 function drawTokenStream() {
-    // Translucent black background to create trail
-    ctx.fillStyle = 'rgba(10, 11, 16, 0.05)';
+    // Faster fade = cleaner characters, no overlapping smear
+    ctx.fillStyle = 'rgba(10, 11, 16, 0.15)';
     ctx.fillRect(0, 0, cw, ch);
 
-    // Setup text style
-    ctx.fillStyle = 'rgba(0, 240, 255, 0.4)'; // Cyan text, partly transparent
-    ctx.font = fontSize + 'px "JetBrains Mono", monospace';
+    ctx.font = `${fontSize}px "JetBrains Mono", monospace`;
+    ctx.textBaseline = 'top';
 
     for (let i = 0; i < drops.length; i++) {
-        // Random character
         const text = chars[Math.floor(Math.random() * chars.length)];
+        const x = i * colSpacing;
+        const y = drops[i] * fontSize;
 
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+        // Lead character — bright
+        ctx.fillStyle = colColor[i] === 1
+            ? 'rgba(200, 150, 255, 0.9)'
+            : 'rgba(160, 255, 255, 0.9)';
+        ctx.fillText(text, x, y);
 
-        // Reset drop to top randomly
-        if (drops[i] * fontSize > ch && Math.random() > 0.975) {
+        // Reset drop to top
+        if (y > ch && Math.random() > 0.96) {
             drops[i] = 0;
+            colColor[i] = Math.random() > 0.65 ? 1 : 0;
         }
 
-        // Move drop down
-        drops[i]++;
+        drops[i] += 0.5;
     }
 }
 
-// Animation loop
-setInterval(drawTokenStream, 50);
+// Animation loop — use rAF instead of setInterval to prevent scroll jank
+let lastFrameTime = 0;
+const FRAME_INTERVAL = 45; // ms between canvas redraws
+
+function animationLoop(timestamp) {
+    if (timestamp - lastFrameTime >= FRAME_INTERVAL) {
+        drawTokenStream();
+        lastFrameTime = timestamp;
+    }
+    requestAnimationFrame(animationLoop);
+}
+requestAnimationFrame(animationLoop);
+
 
 
 // 4. Live Terminal Component Logic
@@ -178,7 +169,58 @@ terminalOutput.addEventListener('click', () => {
     terminalInput.focus();
 });
 
-// 5. GitHub Repos Section
+// 5. Contact Form — Formspree (direct email delivery)
+const contactForm = document.getElementById('contact-form');
+const formStatus = document.getElementById('form-status');
+const transmitBtn = document.getElementById('transmit-btn');
+
+// Replace YOUR_FORM_ID with your Formspree form ID (see formspree.io)
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/YOUR_FORM_ID';
+
+contactForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById('contact-name').value.trim();
+    const email = document.getElementById('contact-email').value.trim();
+    const message = document.getElementById('contact-message').value.trim();
+
+    if (!name || !email || !message) {
+        formStatus.style.color = 'rgba(255,80,80,0.9)';
+        formStatus.textContent = '// All fields required before transmission.';
+        return;
+    }
+
+    transmitBtn.disabled = true;
+    transmitBtn.textContent = 'TRANSMITTING...';
+    formStatus.style.color = 'rgba(160,160,160,0.8)';
+    formStatus.textContent = '// Establishing connection...';
+
+    try {
+        const res = await fetch(FORMSPREE_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({ name, email, message })
+        });
+
+        if (res.ok) {
+            formStatus.style.color = 'rgba(0, 240, 255, 0.9)';
+            formStatus.textContent = '// Transmission successful. Message received ✓';
+            contactForm.reset();
+        } else {
+            const data = await res.json();
+            throw new Error(data?.errors?.[0]?.message || 'Server rejected transmission.');
+        }
+    } catch (err) {
+        formStatus.style.color = 'rgba(255,80,80,0.9)';
+        formStatus.textContent = `// Error: ${err.message}`;
+    } finally {
+        transmitBtn.disabled = false;
+        transmitBtn.textContent = 'TRANSMIT';
+        setTimeout(() => { formStatus.textContent = ''; }, 6000);
+    }
+});
+
+
 const LANG_COLORS = {
     'Python': '#3572A5', 'JavaScript': '#f1e05a', 'TypeScript': '#2b7489',
     'Jupyter Notebook': '#DA5B0B', 'HTML': '#e34c26', 'CSS': '#563d7c',
@@ -189,37 +231,73 @@ const LANG_COLORS = {
 // Repos to skip (profile READMEs, config repos etc.)
 const SKIP_REPOS = ['Kaustubh-Mestri', 'Kaustubh'];
 
+const CACHE_KEY = 'gh_repos_cache';
+const CACHE_TTL = 30 * 60 * 1000; // 30 minutes
+
 async function fetchAndRenderRepos() {
     const grid = document.getElementById('github-repos-grid');
     if (!grid) return;
 
+    // --- Try cache first for instant display ---
     try {
-        const res = await fetch('https://api.github.com/users/KaustubhMestri/repos?per_page=50&sort=pushed');
+        const cached = localStorage.getItem(CACHE_KEY);
+        if (cached) {
+            const { timestamp, data } = JSON.parse(cached);
+            if (Date.now() - timestamp < CACHE_TTL) {
+                renderRepos(grid, data);
+                return; // served from cache, skip network call
+            }
+        }
+    } catch (_) { /* ignore bad cache */ }
+
+    // --- Fetch from GitHub API ---
+    try {
+        const res = await fetch(
+            'https://api.github.com/users/KaustubhMestri/repos?per_page=20&sort=pushed',
+            { headers: { 'Accept': 'application/vnd.github.v3+json' } }
+        );
+        if (!res.ok) throw new Error(`GitHub API ${res.status}`);
         const repos = await res.json();
 
-        const filtered = repos
-            .filter(r => !SKIP_REPOS.includes(r.name) && !r.fork)
-            .sort((a, b) => (b.stargazers_count - a.stargazers_count) || (b.size - a.size));
+        // Store in cache
+        try {
+            localStorage.setItem(CACHE_KEY, JSON.stringify({ timestamp: Date.now(), data: repos }));
+        } catch (_) { /* ignore storage quota errors */ }
 
-        grid.innerHTML = '';
+        renderRepos(grid, repos);
 
-        if (filtered.length === 0) {
-            grid.innerHTML = '<p class="mono text-secondary" style="grid-column:1/-1;text-align:center;padding:2rem;">No public repositories found.</p>';
-            return;
-        }
+    } catch (err) {
+        grid.innerHTML = '<p class="mono text-secondary" style="grid-column:1/-1;text-align:center;padding:2rem;">Failed to load repositories. <a href="https://github.com/KaustubhMestri" target="_blank" style="color:var(--color-accent-cyan)">View on GitHub →</a></p>';
+        console.error('GitHub API error:', err);
+    }
+}
 
-        filtered.forEach(repo => {
-            const langColor = LANG_COLORS[repo.language] || LANG_COLORS['default'];
-            const desc = repo.description || 'No description provided.';
-            const homepage = repo.homepage ? `<a href="${repo.homepage}" target="_blank" style="font-size:0.7rem;font-family:var(--font-mono);color:var(--color-accent-purple);text-decoration:none;margin-left:auto;" title="Live Demo">↗ Live</a>` : '';
+function renderRepos(grid, repos) {
+    const filtered = repos
+        .filter(r => !SKIP_REPOS.includes(r.name) && !r.fork)
+        .sort((a, b) => (b.stargazers_count - a.stargazers_count) || (b.size - a.size));
 
-            const card = document.createElement('a');
-            card.className = 'repo-card interactive';
-            card.href = repo.html_url;
-            card.target = '_blank';
-            card.rel = 'noopener noreferrer';
+    grid.innerHTML = '';
 
-            card.innerHTML = `
+    if (filtered.length === 0) {
+        grid.innerHTML = '<p class="mono text-secondary" style="grid-column:1/-1;text-align:center;padding:2rem;">No public repositories found.</p>';
+        return;
+    }
+
+    filtered.forEach(repo => {
+        const langColor = LANG_COLORS[repo.language] || LANG_COLORS['default'];
+        const desc = repo.description || 'No description provided.';
+        const homepage = repo.homepage
+            ? `<a href="${repo.homepage}" target="_blank" style="font-size:0.7rem;font-family:var(--font-mono);color:var(--color-accent-purple);text-decoration:none;margin-left:auto;" title="Live Demo">↗ Live</a>`
+            : '';
+
+        const card = document.createElement('a');
+        card.className = 'repo-card interactive';
+        card.href = repo.html_url;
+        card.target = '_blank';
+        card.rel = 'noopener noreferrer';
+
+        card.innerHTML = `
         <div class="repo-card-name">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
@@ -237,26 +315,17 @@ async function fetchAndRenderRepos() {
         </div>
         <div class="repo-card-arrow">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
-        </div>
-      `;
+        </div>`;
 
-            grid.appendChild(card);
+        grid.appendChild(card);
+    });
 
-            // Add hover cursor effect to dynamically created cards
-            card.addEventListener('mouseenter', () => cursor.classList.add('active'));
-            card.addEventListener('mouseleave', () => cursor.classList.remove('active'));
-        });
-
-        // Stagger reveal after render
-        if (window.__staggerCards) window.__staggerCards();
-
-    } catch (err) {
-        grid.innerHTML = '<p class="mono text-secondary" style="grid-column:1/-1;text-align:center;padding:2rem;">Failed to load repositories. <a href="https://github.com/KaustubhMestri" target="_blank" style="color:var(--color-accent-cyan)">View on GitHub →</a></p>';
-        console.error('GitHub API error:', err);
-    }
+    // Stagger reveal after render
+    if (window.__staggerCards) window.__staggerCards();
 }
 
 fetchAndRenderRepos();
+
 
 // 6. Nav scroll effect
 const nav = document.querySelector('nav');

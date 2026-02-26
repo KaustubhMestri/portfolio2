@@ -68,13 +68,6 @@ html {
     transition-delay: 0.3s;
 }
 
-/* Custom Cursor Base */
-* {
-    cursor: none;
-    /* Hide default cursor globally */
-}
-
-/* Revert cursor for fallback if js fails, but hide by default on body */
 
 body {
     font-family: var(--font-sans);
@@ -83,7 +76,7 @@ body {
     line-height: 1.6;
     overflow-x: hidden;
     position: relative;
-    cursor: none;
+    cursor: auto;
 }
 
 /* Canvas Background */
@@ -94,7 +87,7 @@ body {
     width: 100vw;
     height: 100vh;
     z-index: -1;
-    opacity: 0.15;
+    opacity: 0.28;
     pointer-events: none;
 }
 
@@ -240,7 +233,8 @@ nav.scrolled {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
+    text-align: center;
     padding-top: 5rem;
     /* Account for nav */
 }
@@ -248,8 +242,10 @@ nav.scrolled {
 .hero-content {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 1.5rem;
     max-width: 800px;
+    width: 100%;
 }
 
 .hero-eyebrow {
@@ -625,8 +621,7 @@ textarea.form-control {
     color: var(--color-bg-base);
     font-weight: 600;
     border: none;
-    cursor: none;
-    /* keep custom cursor */
+    cursor: pointer;
 }
 
 .submit-btn.interactive:hover {
@@ -751,6 +746,7 @@ textarea.form-control {
     flex: 1;
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -821,4 +817,236 @@ textarea.form-control {
 
 .blink {
     animation: blink 1s step-start infinite;
+}
+
+/* ─── Connect Cards ──────────────────────────────────────── */
+.connect-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+    max-width: 860px;
+    margin: 0 auto;
+}
+
+.connect-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem 1.75rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 16px;
+    text-decoration: none;
+    color: var(--color-text-primary);
+    transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.3s ease;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.connect-card:hover {
+    transform: translateY(-4px);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+}
+
+.connect-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.connect-icon--blue {
+    background: rgba(0, 119, 181, 0.18);
+    color: #0A9AD7;
+}
+
+.connect-icon--cyan {
+    background: rgba(0, 240, 255, 0.12);
+    color: var(--color-accent-cyan);
+}
+
+.connect-icon--purple {
+    background: rgba(138, 43, 226, 0.18);
+    color: var(--color-accent-purple);
+}
+
+.connect-icon--green {
+    background: rgba(0, 220, 130, 0.15);
+    color: #00DC82;
+}
+
+.connect-card:hover .connect-icon--blue {
+    background: rgba(0, 119, 181, 0.3);
+    box-shadow: 0 0 16px rgba(10, 154, 215, 0.35);
+}
+
+.connect-card:hover .connect-icon--cyan {
+    background: rgba(0, 240, 255, 0.22);
+    box-shadow: 0 0 16px rgba(0, 240, 255, 0.35);
+}
+
+.connect-card:hover .connect-icon--purple {
+    background: rgba(138, 43, 226, 0.3);
+    box-shadow: 0 0 16px rgba(138, 43, 226, 0.35);
+}
+
+.connect-card:hover .connect-icon--green {
+    background: rgba(0, 220, 130, 0.28);
+    box-shadow: 0 0 16px rgba(0, 220, 130, 0.35);
+}
+
+.connect-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.connect-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    opacity: 0.7;
+}
+
+.connect-value {
+    font-size: 0.95rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.connect-arrow {
+    color: var(--color-text-secondary);
+    opacity: 0.4;
+    flex-shrink: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.connect-card:hover .connect-arrow {
+    opacity: 1;
+    transform: translate(3px, -3px);
+}
+
+/* ─── Mobile Responsive ──────────────────────────────────── */
+@media (max-width: 768px) {
+
+    /* Nav */
+    nav {
+        padding: 1rem 1.25rem;
+    }
+
+    .nav-links {
+        gap: 1.2rem;
+    }
+
+    .nav-links a {
+        font-size: 0.8rem;
+    }
+
+    /* Container */
+    .container {
+        padding: 3rem 1.25rem;
+    }
+
+    /* Hero */
+    .hero {
+        padding-top: 6rem;
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
+    }
+
+    .hero-title {
+        font-size: clamp(2.8rem, 12vw, 5rem);
+        line-height: 1.05;
+    }
+
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+
+    .hero-cta {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+        width: 100%;
+    }
+
+    .hero-cta .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Section title */
+    .section-title {
+        font-size: 1.6rem;
+    }
+
+    /* Bento grid */
+    .bento-grid,
+    .bento-grid-2 {
+        grid-template-columns: 1fr;
+    }
+
+    /* Terminal */
+    .terminal {
+        font-size: 0.8rem;
+    }
+
+    /* Tech pills */
+    .tech-container {
+        justify-content: center;
+    }
+
+    /* GitHub repos */
+    .github-repos-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Connect grid → single column */
+    .connect-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .connect-value {
+        font-size: 0.85rem;
+    }
+
+    /* Bento items — reset column/row span */
+    .bento-item[style*="grid-column"],
+    .bento-item[style*="grid-row"] {
+        grid-column: auto !important;
+        grid-row: auto !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: clamp(2.2rem, 14vw, 3.5rem);
+    }
+
+    .connect-card {
+        padding: 1.1rem 1.25rem;
+    }
+
+    .connect-icon {
+        width: 44px;
+        height: 44px;
+    }
+
+    nav .logo {
+        font-size: 1.05rem;
+    }
+
+    .nav-links a {
+        font-size: 0.72rem;
+    }
 }
