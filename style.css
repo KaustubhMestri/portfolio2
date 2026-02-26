@@ -676,7 +676,7 @@ textarea.form-control {
 }
 
 /* GitHub Repos Grid */
-.github-repos-grid {
+.repo-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 1.5rem;
@@ -688,11 +688,11 @@ textarea.form-control {
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
     border: 1px solid var(--glass-border);
-    border-radius: 16px;
-    padding: 1.75rem;
+    border-radius: 12px;
+    padding: 1.5rem;
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 1rem;
     transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
         border-color 0.4s ease,
         box-shadow 0.4s ease;
@@ -726,17 +726,19 @@ textarea.form-control {
 
 .repo-card-name {
     font-family: var(--font-mono);
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: var(--color-accent-cyan);
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 0.5rem;
+    line-height: 1.4;
 }
 
 .repo-card-name svg {
     flex-shrink: 0;
-    opacity: 0.6;
+    opacity: 0.8;
+    margin-top: 0.15rem;
 }
 
 .repo-card-desc {
@@ -745,8 +747,9 @@ textarea.form-control {
     line-height: 1.6;
     flex: 1;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
-    line-clamp: 3;
+    -webkit-line-clamp: 4;
+    /* Let it wrap more if needed */
+    line-clamp: 4;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -754,46 +757,41 @@ textarea.form-control {
 .repo-card-meta {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    margin-top: auto;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
     font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--color-text-muted);
+    margin-top: auto;
+    padding-top: 1rem;
 }
 
-.repo-lang {
+.repo-lang,
+.repo-stars {
     display: flex;
     align-items: center;
     gap: 0.35rem;
 }
 
+.repo-lang {
+    opacity: 0.8;
+}
+
 .lang-dot {
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     display: inline-block;
-    flex-shrink: 0;
 }
 
 .repo-stars {
+    opacity: 0.6;
+}
+
+/* Optional live link container inside meta */
+.repo-card-meta-right {
     display: flex;
     align-items: center;
-    gap: 0.3rem;
-    margin-left: auto;
-}
-
-.repo-card-arrow {
-    position: absolute;
-    bottom: 1.75rem;
-    right: 1.75rem;
-    color: var(--color-accent-cyan);
-    opacity: 0;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.repo-card:hover .repo-card-arrow {
-    opacity: 1;
-    transform: translate(3px, -3px);
+    gap: 1rem;
 }
 
 .repo-loading {
