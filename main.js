@@ -231,70 +231,60 @@ const LANG_COLORS = {
 // Repos to skip (profile READMEs, config repos etc.)
 const SKIP_REPOS = ['Kaustubh-Mestri', 'Kaustubh'];
 
-const HARDCODED_REPOS = [
-    {
-        name: "Receipt-Text-Extraction-and-Parsing-Using-OCR",
-        description: "An OCR-based Python project using pytesseract to extract and parse information like date, amount, and store name from receipt images.",
-        html_url: "https://github.com/KaustubhMestri/Receipt-Text-Extraction-and-Parsing-Using-OCR",
-        homepage: "",
-        language: "Python",
-        stargazers_count: 1,
-        size: 14648
-    },
-    {
-        name: "Medical-Chatbot",
-        description: "A simple AI-powered medical chatbot that provides basic health information, symptom guidance, and wellness tips.",
-        html_url: "https://github.com/KaustubhMestri/Medical-Chatbot",
-        homepage: "",
-        language: "Python", // Mapped from Jupyter Notebook for better visibility
-        stargazers_count: 0,
-        size: 61515
-    },
-    {
-        name: "Zomato-Restaurant-Intelligence-Recommendation-Platform",
-        description: "A complete data + ML + business intelligence system (Not just charts, but decisions).",
-        html_url: "https://github.com/KaustubhMestri/Zomato-Restaurant-Intelligence-Recommendation-Platform",
-        homepage: "",
-        language: "Jupyter Notebook",
-        stargazers_count: 0,
-        size: 7340
-    },
-    {
-        name: "Stock-Forecast-App",
-        description: "Forecast and compare BSE stock prices using ARIMA with an interactive Streamlit UI.",
-        html_url: "https://github.com/KaustubhMestri/Stock-Forecast-App",
-        homepage: "https://stock-forecast-app-6fax3fpdeetb633tye6t7m.streamlit.app/",
-        language: "Python",
-        stargazers_count: 0,
-        size: 1173
-    },
-    {
-        name: "Termux-Test",
-        description: "TERMUX DEPLOYMENT TESTING",
-        html_url: "https://github.com/KaustubhMestri/Termux-Test",
-        homepage: "",
-        language: "Python",
-        stargazers_count: 0,
-        size: 5
-    },
-    {
-        name: "portfolio2",
-        description: "Gen AI Developer Portfolio",
-        html_url: "https://github.com/KaustubhMestri/portfolio2",
-        homepage: "https://kaustubhmestri.github.io/portfolio2/",
-        language: "CSS",
-        stargazers_count: 0,
-        size: 0
-    }
-];
+const CACHE_KEY = 'gh_repos_cache';
+const CACHE_TTL = 30 * 60 * 1000; // 30 minutes
 
-function renderRepos() {
+async function fetchAndRenderRepos() {
     const grid = document.getElementById('github-repos-grid');
     if (!grid) return;
 
+    // --- Try cache first for instant display ---
+    try {
+        const cached = localStorage.getItem(CACHE_KEY);
+        if (cached) {
+            const { timestamp, data } = JSON.parse(cached);
+            if (Date.now() - timestamp < CACHE_TTL) {
+                renderRepos(grid, data);
+                return; // served from cache, skip network call
+            }
+        }
+    } catch (_) { /* ignore bad cache */ }
+
+    // --- Fetch from GitHub API ---
+    try {
+        const res = await fetch(
+            'https://api.github.com/users/KaustubhMestri/repos?per_page=20&sort=pushed',
+            { headers: { 'Accept': 'application/vnd.github.v3+json' } }
+        );
+        if (!res.ok) throw new Error(`GitHub API ${res.status}`);
+        const repos = await res.json();
+
+        // Store in cache
+        try {
+            localStorage.setItem(CACHE_KEY, JSON.stringify({ timestamp: Date.now(), data: repos }));
+        } catch (_) { /* ignore storage quota errors */ }
+
+        renderRepos(grid, repos);
+
+    } catch (err) {
+        grid.innerHTML = '<p class="mono text-secondary" style="grid-column:1/-1;text-align:center;padding:2rem;">Failed to load repositories. <a href="https://github.com/KaustubhMestri" target="_blank" style="color:var(--color-accent-cyan)">View on GitHub →</a></p>';
+        console.error('GitHub API error:', err);
+    }
+}
+
+function renderRepos(grid, repos) {
+    const filtered = repos
+        .filter(r => !SKIP_REPOS.includes(r.name) && !r.fork)
+        .sort((a, b) => (b.stargazers_count - a.stargazers_count) || (b.size - a.size));
+
     grid.innerHTML = '';
 
-    HARDCODED_REPOS.forEach(repo => {
+    if (filtered.length === 0) {
+        grid.innerHTML = '<p class="mono text-secondary" style="grid-column:1/-1;text-align:center;padding:2rem;">No public repositories found.</p>';
+        return;
+    }
+
+    filtered.forEach(repo => {
         const langColor = LANG_COLORS[repo.language] || LANG_COLORS['default'];
         const desc = repo.description || 'No description provided.';
         const homepage = repo.homepage
@@ -334,7 +324,7 @@ function renderRepos() {
     if (window.__staggerCards) window.__staggerCards();
 }
 
-renderRepos();
+fetchAndRenderRepos();
 
 
 // 6. Nav scroll effect
